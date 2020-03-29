@@ -9,77 +9,11 @@
 import SwiftUI
 
 struct ContentView: View {
-    let colors: [(String, Color)] = [
-        ("Color.clear", Color.clear),
-        ("Color.black", .black),
-        ("Color.white", .white),
-        ("Color.gray", .gray),
-        ("Color.red", .red),
-        ("Color.green", .green),
-        ("Color.blue", .blue),
-        ("Color.orange", .orange),
-        ("Color.yellow", .yellow),
-        ("Color.pink", .pink),
-        ("Color.purple", .purple),
-        ("Color.primary", .primary),
-        ("Color.secondary", .secondary),
-        ("Color.accentColor", .accentColor),
-
-        ("UIColor.black", Color(UIColor.black)),
-        ("UIColor.darkGray", Color(UIColor.darkGray)),
-        ("UIColor.lightGray", Color(UIColor.lightGray)),
-        ("UIColor.white", Color(UIColor.white)),
-        ("UIColor.gray", Color(UIColor.gray)),
-        ("UIColor.red", Color(UIColor.red)),
-        ("UIColor.green", Color(UIColor.green)),
-        ("UIColor.blue", Color(UIColor.blue)),
-        ("UIColor.cyan", Color(UIColor.cyan)),
-        ("UIColor.yellow", Color(UIColor.yellow)),
-        ("UIColor.magenta", Color(UIColor.magenta)),
-        ("UIColor.orange", Color(UIColor.orange)),
-        ("UIColor.purple", Color(UIColor.purple)),
-        ("UIColor.brown", Color(UIColor.brown)),
-        ("UIColor.clear", Color(UIColor.clear)),
-
-        ("UIColor.systemRed", Color(UIColor.systemRed)),
-        ("UIColor.systemGreen", Color(UIColor.systemGreen)),
-        ("UIColor.systemBlue", Color(UIColor.systemBlue)),
-        ("UIColor.systemOrange", Color(UIColor.systemOrange)),
-        ("UIColor.systemYellow", Color(UIColor.systemYellow)),
-        ("UIColor.systemPink", Color(UIColor.systemPink)),
-        ("UIColor.systemPurple", Color(UIColor.systemPurple)),
-        ("UIColor.systemTeal", Color(UIColor.systemTeal)),
-        ("UIColor.systemIndigo", Color(UIColor.systemIndigo)),
-        ("UIColor.systemGray", Color(UIColor.systemGray)),
-        ("UIColor.systemGray2", Color(UIColor.systemGray2)),
-        ("UIColor.systemGray3", Color(UIColor.systemGray3)),
-        ("UIColor.systemGray4", Color(UIColor.systemGray4)),
-        ("UIColor.systemGray5", Color(UIColor.systemGray5)),
-        ("UIColor.systemGray6", Color(UIColor.systemGray6)),
-        ("UIColor.label", Color(UIColor.label)),
-        ("UIColor.secondaryLabel", Color(UIColor.secondaryLabel)),
-        ("UIColor.tertiaryLabel", Color(UIColor.tertiaryLabel)),
-        ("UIColor.quaternaryLabel", Color(UIColor.quaternaryLabel)),
-        ("UIColor.link", Color(UIColor.link)),
-        ("UIColor.placeholderText", Color(UIColor.placeholderText)),
-        ("UIColor.separator", Color(UIColor.separator)),
-        ("UIColor.opaqueSeparator", Color(UIColor.opaqueSeparator)),
-        ("UIColor.systemBackground", Color(UIColor.systemBackground)),
-        ("UIColor.secondarySystemBackground", Color(UIColor.secondarySystemBackground)),
-        ("UIColor.tertiarySystemBackground", Color(UIColor.tertiarySystemBackground)),
-        ("UIColor.systemGroupedBackground", Color(UIColor.systemGroupedBackground)),
-        ("UIColor.secondarySystemGroupedBackground", Color(UIColor.secondarySystemGroupedBackground)),
-        ("UIColor.tertiarySystemGroupedBackground", Color(UIColor.tertiarySystemGroupedBackground)),
-        ("UIColor.systemFill", Color(UIColor.systemFill)),
-        ("UIColor.secondarySystemFill", Color(UIColor.secondarySystemFill)),
-        ("UIColor.tertiarySystemFill", Color(UIColor.tertiarySystemFill)),
-        ("UIColor.quaternarySystemFill", Color(UIColor.quaternarySystemFill)),
-        ("UIColor.lightText", Color(UIColor.lightText)),
-        ("UIColor.darkText", Color(UIColor.darkText)),
-        ("UIColor.groupTableViewBackground", Color(UIColor.groupTableViewBackground)),
-    ]
-
     @Environment(\.colorScheme) var colorScheme: ColorScheme
+    var oppositeScheme: ColorScheme {
+        colorScheme == .dark ? .light : .dark
+    }
+    @Environment(\.colorSchemeContrast) var colorSchemeContrast: ColorSchemeContrast
     @State private var isShowingCheckerboard = true
 
     var checkerboard: some View {
@@ -94,24 +28,42 @@ struct ContentView: View {
             checkerboard
             HStack(spacing: 0) {
                 color
-                color.environment(\.colorScheme, colorScheme == .dark ? .light : .dark)
+                color.colorScheme(oppositeScheme)
             }
         }
     }
 
-    func colorDetail(color: Color) -> some View {
-        let current = colorScheme == .dark ? "Dark" : "Light"
-        let alternate = colorScheme == .light ? "Dark" : "Light"
+    func colorDetail(color: Palette.Color) -> some View {
+        let current = colorScheme == .dark ? "Dark Mode (Current)" : "Light Mode (Current)"
+        let opposite = colorScheme == .light ? "Dark Mode" : "Light Mode"
 
         return
             ZStack {
-                checkerboard
-                HStack(spacing: 0) {
-                    color.overlay(Text(current).bold().foregroundColor(.white).shadow(color: .black, radius: 1.5))
-                    color.overlay(Text(alternate).bold().foregroundColor(.white).shadow(color: .black, radius: 1.5))
-                        .environment(\.colorScheme, colorScheme == .dark ? .light : .dark)
+                VStack {
+                    checkerboard.opacity(0)
+                    checkerboard
                 }
-            }.navigationBarItems(trailing: checkerboardToggle)
+                HStack(spacing: 0) {
+                    color.color.overlay(Text(current).bold().foregroundColor(.white).shadow(color: .black, radius: 1.5))
+                    color.color.overlay(Text(opposite).bold().foregroundColor(.white).shadow(color: .black, radius: 1.5))
+                        .colorScheme(oppositeScheme)
+                }
+                .font(.title)
+                .multilineTextAlignment(.center)
+
+                if color.description != nil {
+                    VStack {
+                        Text(color.description ?? "").padding()
+                            .background(Color(UIColor.tertiarySystemBackground)
+                                .cornerRadius(10).opacity(0.75).shadow(radius: 2))
+                            .padding()
+                        Spacer()
+                    }
+                }
+            }
+            .navigationBarItems(trailing: checkerboardToggle)
+            .navigationBarTitle(color.name)
+            .edgesIgnoringSafeArea(.bottom)
     }
 
     var checkerboardToggle: some View {
@@ -130,25 +82,47 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                ForEach(colors, id: \.0) { color in
-                    NavigationLink(destination: self.colorDetail(color: color.1).navigationBarTitle(color.0)) {
-                        Text(color.0).bold()
-                            .foregroundColor(.white)
-                            .shadow(color: .black, radius: 1.5)
-                            .padding(4)
+                ForEach(palettes) { palette in
+                    Section(header: Text(palette.name)) {
+                        ForEach(palette.colors) { c in
+                            NavigationLink(destination: LazyView(self.colorDetail(color: c))) {
+                                Text(c.name).bold().foregroundColor(.white)
+                                    .shadow(color: .black, radius: 1.5)
+                                    .padding(4)
+                            }.listRowBackground(self.backgroundSwatch(color: c.color))
+                        }
                     }
-                    .listRowBackground(self.backgroundSwatch(color: color.1).labelsHidden())
                 }
             }
+            //.listStyle(GroupedListStyle())
             .navigationBarTitle("Colors")
-            .navigationBarItems(trailing: checkerboardToggle)
+            .navigationBarItems(trailing: self.checkerboardToggle)
         }.navigationViewStyle(StackNavigationViewStyle())
     }
 }
 
+#if DEBUG
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
-//        Image("checkerboard").resizable(resizingMode: .tile)
+        Group {
+            ContentView()
+            ContentView().colorDetail(color: systemPalette.colors[21])
+            ContentView().backgroundSwatch(color: .blue)
+            Image("checkerboard").resizable(resizingMode: .tile)
+        }
     }
 }
+#endif
+
+struct LazyView<Content: View>: View {
+    let build: () -> Content
+
+    init(_ build: @autoclosure @escaping () -> Content) {
+        self.build = build
+    }
+
+    var body: some View {
+        build()
+    }
+}
+

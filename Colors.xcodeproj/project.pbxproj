@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC18CF26242FB0B400C39C2F /* ColorPalettes.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC18CF25242FB0B400C39C2F /* ColorPalettes.swift */; };
 		AC83E8E52414396A002BC5A3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC83E8E42414396A002BC5A3 /* AppDelegate.swift */; };
 		AC83E8E72414396A002BC5A3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC83E8E62414396A002BC5A3 /* SceneDelegate.swift */; };
 		AC83E8E92414396A002BC5A3 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC83E8E82414396A002BC5A3 /* ContentView.swift */; };
@@ -35,6 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AC18CF25242FB0B400C39C2F /* ColorPalettes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalettes.swift; sourceTree = "<group>"; };
 		AC83E8E12414396A002BC5A3 /* Colors.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Colors.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC83E8E42414396A002BC5A3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		AC83E8E62414396A002BC5A3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 				AC83E8E42414396A002BC5A3 /* AppDelegate.swift */,
 				AC83E8E62414396A002BC5A3 /* SceneDelegate.swift */,
 				AC83E8E82414396A002BC5A3 /* ContentView.swift */,
+				AC18CF25242FB0B400C39C2F /* ColorPalettes.swift */,
 				AC83E8EA2414396E002BC5A3 /* Assets.xcassets */,
 				AC83E8EF2414396E002BC5A3 /* LaunchScreen.storyboard */,
 				AC83E8F22414396E002BC5A3 /* Info.plist */,
@@ -270,6 +273,7 @@
 				AC83E8E52414396A002BC5A3 /* AppDelegate.swift in Sources */,
 				AC83E8E72414396A002BC5A3 /* SceneDelegate.swift in Sources */,
 				AC83E8E92414396A002BC5A3 /* ContentView.swift in Sources */,
+				AC18CF26242FB0B400C39C2F /* ColorPalettes.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
